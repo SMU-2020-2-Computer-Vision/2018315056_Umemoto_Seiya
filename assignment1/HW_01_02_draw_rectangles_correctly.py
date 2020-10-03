@@ -10,7 +10,7 @@ color = (255, 255, 255)
 
 # Mouse event callback
 def mouse_callback(event, x, y, flags, param):
-    global mouse_is_pressed, mouse_start_x, mouse_start_y, color
+    global mouse_is_pressed, mouse_start_x, mouse_start_y, color, img_color, pre_img, next_img, last_img
 
     # Left button pressed
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -24,22 +24,38 @@ def mouse_callback(event, x, y, flags, param):
         # Pick a random color
         color = (random.randrange(256), random.randrange(256), random.randrange(256))
     
-    elif event == cv2.EVENT_MOUSEMOVE and mouse_is_pressed == True:
-        cv2.rectangle(img_color, (mouse_start_x, mouse_start_y), (x, y), color, -1)
-        cv2.line(img_color, (x, y), (rows, cols), (0, 0, 0), 1)
-
+    # Mouse dragged
+    elif event == cv2.EVENT_MOUSEMOVE:
+        if mouse_is_pressed:
+            # Make the image black
+            img_color = next_img - pre_img
+            # Restore the previous image
+            img_color |= last_img
+            # Draw a rectangle
+            next_img = cv2.rectangle(img_color, (mouse_start_x, mouse_start_y), (x, y), color, -1)
+            # Store the image for the next callback
+            pre_img = next_img     
+            
     # Left button released
     elif event == cv2.EVENT_LBUTTONUP:
         # Flag off
         mouse_is_pressed = False
 
         # Draw a rectangle
-        cv2.rectangle(img_color, (mouse_start_x, mouse_start_y), (x, y), color, -1)
+        next_img = cv2.rectangle(img_color, (mouse_start_x, mouse_start_y), (x, y), color, -1)
+
+        # Store the image when left button released
+        last_img = next_img
 
 # Create a black image
 rows = 480
 cols = 640
 img_color = np.zeros((rows, cols, 3), np.uint8)
+
+# Store the images
+pre_img = img_color
+next_img = img_color
+last_img = img_color
 
 # Create a window
 winname = 'Mouse Events'
