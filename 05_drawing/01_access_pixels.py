@@ -3,7 +3,6 @@ import numpy as np
 import cv2
 
 # Get the path to the current file
-print(os.path.abspath(__file__))
 cwd = os.path.dirname(os.path.abspath(__file__))
 
 # Change the working directory
