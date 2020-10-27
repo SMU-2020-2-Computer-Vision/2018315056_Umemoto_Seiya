@@ -16,6 +16,7 @@ if img is None:
     exit(1)
 
 # Set the region of interest
+# ROI = img[286:332, 338:390]
 ROI = img[286:332, 338:390]
 
 # Display all channels in a window
