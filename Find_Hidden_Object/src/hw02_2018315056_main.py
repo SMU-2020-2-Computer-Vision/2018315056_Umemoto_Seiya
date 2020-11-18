@@ -13,7 +13,6 @@ img_reference = cv2.imread('../img/test_background.png', 0)
 
 # Load a template image as grayscale
 img_template = cv2.imread('../img/fish.png', 0)
-w, h = img_template.shape[::-1]
 
 start = time.time()
 # Apply template matching
@@ -23,7 +22,7 @@ print(f"time taken: {end - start:.4f}s")
 print(f"coordinate:({x}, {y}), angle:{angle}degrees, scale:{scale}")
 
 # # Draw a bounding box
-cv2.rectangle(img_reference, (x, y), (x + w, y + h), (0, 0, 0), 2)
+cv2.rectangle(img_reference, (x, y), (x + img_template.shape[1], y + img_template.shape[0]), 0, 2)
 
 plt.subplot(121),plt.imshow(img_reference,cmap = 'gray')
 plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
